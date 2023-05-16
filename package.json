@@ -1,0 +1,33 @@
+{
+  "name": "nodecache",
+  "version": "1.0.0",
+  "description": "A lightweight in-memory cache module for Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashchouhan16/nodeCache.git"
+  },
+  "keywords": [
+    "in-memory",
+    "cache",
+    "nodeCache",
+    "node-cache",
+    "in-memory-storage"
+  ],
+  "author": {
+    "name": "Akash Chouhan",
+    "email": "akash.c1500@gmail.com",
+    "github": "akashchouhan16"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akashchouhan16/nodeCache/issues"
+  },
+  "homepage": "https://github.com/akashchouhan16/nodeCache#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
