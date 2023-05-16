@@ -1,0 +1,26 @@
+# CI configurations and yml files.
+.github/
+
+# Local test directories
+Test/
+bin/
+*test.*
+
+# Node development modules
+node_modules
+npm-debug.log
+
+# Others 
+*.vscode/
+*.sublime*
+.editorconfig
+.DS_Store
+*.yml
+.git*
+
+*.png
+*.jpg
+*.jpeg
+*.svg
+/logo/
+/coverage/
