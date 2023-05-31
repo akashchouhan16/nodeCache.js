@@ -29,5 +29,6 @@
   "homepage": "https://github.com/akashchouhan16/nodeCache#readme",
   "devDependencies": {
     "jest": "^29.5.0"
-  }
+  },
+  "type": "module"
 }
