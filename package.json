@@ -1,7 +1,7 @@
 {
   "name": "nodecache.js",
   "version": "1.0.0",
-  "description": "A lightweight in-memory cache module for Node.js.",
+  "description": "A lightweight in-memory cache with TTL support for Node.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
