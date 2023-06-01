@@ -1,7 +1,7 @@
 import { log, warn, error } from 'console'
 
 
-const options = {
+const formatOptions = {
     dateStyle: 'short',
     timeStyle: 'short',
     hour12: true,
@@ -29,50 +29,43 @@ export default class Logger {
     }
 
     log(value, options = {}) {
-        let baseOptions = {
+        const mergedOptions = {
             type: this.type,
             message: this.message,
             mode: this.mode,
-            behaviour: this.behaviour
+            behaviour: this.behaviour,
+            ...options
         };
 
-        if (options) {
-            this.type = options.type ? options.type : this.type;
-            this.message = options.message ? options.message : this.message;
-            this.mode = options.mode ? options.mode : this.mode;
-            this.behaviour = options.behaviour ? options.behaviour : this.behaviour;
-        }
         if (typeof value !== 'string') {
-            if (typeof value === 'object') value = JSON.stringify(value);
-            else value = toString(value);
-        }
-
-        if (this.type === 'default' || this.type === 'info') {
-            let date = new Date();
-            log(`[Info] ${date.toLocaleString('en-US', options)} : ${value ? value : this.message} `);
-        } else if (this.type === 'error') {
-            let date = new Date();
-            error(`[Error] ${date.toLocaleString('en-US', options)} : ${value ? value : this.message} `);
-        } else if (this.type === 'warn') {
-            let date = new Date();
-            warn(`[WARN] ${date.toLocaleString('en-US', options)} : ${value ? value : this.message} `);
-        } else if (this.type === 'fatal') {
-            let date = new Date();
-            if (this.behaviour === "exp") {
-                error(`[FATAL] ${date.toLocaleString('en-US', options)} : ${value ? value : this.message} `);
-                process.exit(1);
+            if (typeof value === 'object') {
+                value = JSON.stringify(value);
+            } else {
+                value = String(value);
             }
-            error(`[FATAL] ${date.toLocaleString('en-US', options)} : ${value ? value : this.message} `);
         }
 
+        const date = new Date().toLocaleString('en-US');
 
-        this.resetOptions(baseOptions);
-    }
-
-    resetOptions(options) {
-        this.type = options.type;
-        this.message = options.message;
-        this.mode = options.mode;
-        this.behaviour = options.behaviour;
+        switch (mergedOptions.type) {
+            case 'default':
+            case 'info':
+                console.log(`[Info] ${date}: ${value || mergedOptions.message}`);
+                break;
+            case 'error':
+                console.error(`[Error] ${date}: ${value || mergedOptions.message}`);
+                break;
+            case 'warn':
+                console.warn(`[WARN] ${date}: ${value || mergedOptions.message}`);
+                break;
+            case 'fatal':
+                console.error(`[FATAL] ${date}: ${value || mergedOptions.message}`);
+                if (mergedOptions.behaviour === 'exp') {
+                    process.exit(1);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
