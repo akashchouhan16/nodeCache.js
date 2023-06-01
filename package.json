@@ -1,5 +1,5 @@
 {
-  "name": "nodecache",
+  "name": "nodecache.js",
   "version": "1.0.0",
   "description": "A lightweight in-memory cache module for Node.js.",
   "main": "index.js",

@@ -3,7 +3,7 @@
  * copyright: 2023 nodeCache @github.com/akashchouhan16
  * */
 
-export default class Logger {
+class Logger {
     constructor(options = {}) {
         this.mode = options.mode || "std" // allowed: [std, exp]
         this.type = options.type || "info" // allowed: [info, warn, error, fatal]
@@ -13,3 +13,5 @@ export default class Logger {
         //TODO
     }
 }
+
+module.exports = Logger
