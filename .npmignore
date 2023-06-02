@@ -6,6 +6,9 @@ Test/
 bin/
 *test.*
 
+# dist
+dist/
+
 # Node development modules
 node_modules
 npm-debug.log
