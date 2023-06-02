@@ -1,7 +1,7 @@
 {
   "name": "nodecache.js",
-  "version": "1.0.0",
-  "description": "A lightweight in-memory cache with TTL support for Node.",
+  "version": "1.1.0",
+  "description": "Simple, Intuitive in-memory cache with TTL support for Node.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
@@ -11,11 +11,12 @@
     "url": "git+https://github.com/akashchouhan16/nodeCache.git"
   },
   "keywords": [
-    "in-memory",
     "cache",
-    "nodeCache",
     "node-cache",
-    "in-memory-storage"
+    "nodecache",
+    "in-memory storage",
+    "node.js cache",
+    "cache with ttl"
   ],
   "author": {
     "name": "Akash Chouhan",
