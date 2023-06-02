@@ -17,6 +17,7 @@ module.exports = CONSTANTS = {
     TERMINATE_MODE_EXP: `Process terminated due to fatal error. NodeCache mode is set to "exp"`,
     INVALID_GETM_INPUT: `Invalid keys. Expecting an array of key:string`,
     INVALID_SETM_INPUT: `Invalid values. Expected an array of <key,value> pairs`,
-    MAX_CACHE_LIMIT: `Cannot set values, Cache max limit hit`
-
+    MAX_CACHE_LIMIT: `Cannot set values, Cache max limit hit`,
+    ITEM_NOTFOUND: `No item not found with the provided key`,
+    WORKER_ERROR: `Error with the worker thread`
 }
