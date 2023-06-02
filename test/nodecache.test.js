@@ -1,8 +1,11 @@
 const NodeCache = require("../index")
 
 describe("NodeCache Initialization Tests", () => {
-
     describe("NodeCache instance with no parameters", () => {
+
+        afterAll(() => {
+            cache.close();
+        })
         let cache = new NodeCache()
         test("NodeCache instance to be not null", () => {
             expect(cache).not.toBe(null)
@@ -20,6 +23,10 @@ describe("NodeCache Initialization Tests", () => {
     })
 
     describe("NodeCache instance with custom type parameters", () => {
+
+        afterAll(() => {
+            cache.close();
+        })
         let cache = new NodeCache({
             type: "Custom"
         })
@@ -39,6 +46,10 @@ describe("NodeCache Initialization Tests", () => {
     })
 
     describe("NodeCache instance with std mode parameters", () => {
+
+        afterAll(() => {
+            cache.close();
+        })
         let cache = new NodeCache({
             mode: "std",
             type: "Custom"
@@ -59,6 +70,10 @@ describe("NodeCache Initialization Tests", () => {
     })
 
     describe("NodeCache instance with invalid parameters", () => {
+
+        afterAll(() => {
+            cache.close();
+        })
         let cache = new NodeCache({
             mode: null,
             type: "xyz",
