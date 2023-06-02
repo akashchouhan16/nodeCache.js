@@ -70,16 +70,55 @@ let myCache = new NodeCache()
     ```
 ---
 
-### 💽 **Methods / APIs**
-- **get(`key: <string, number, object>`) return <`type`>** 
-- **getM(`keys?: Array <{key <number, string>, value <number, string, object>, ttl? number}>`)
-   return `Array<Object{value, ttl}>`**
-- **set(`key: <string, number, object>`) //returns `boolean`**
-- **setM(`values?: Array <{key: value}>`) return Array<`boolean`>**
-- **ttl(key: `<number, string>`, ttl: `number`) return `boolean`**
-- **getTtl(key: `<number, string>`) return `number`**
-- **keys(`void`); return Array<`type`>**
-- **has(`key: <string, number, object>`) return `boolean`**
-- **close(`void`) return `void`**
+## 💽 APIs
+### Access a key: (**get()**)
+  - This function accepts a valid key of type: **`number` or `string`**.
+  - Not found or key expired: Returns **`undefined`** if the **key**.
+  - Found: returns the **`value`** of type: **`number`, `string`, or `object`**.
+  - ```js
+      let value = myCache.get("key")
+    ``` 
+### Access multiple keys: (**getM()**) 
+  - Accepts an Array of valid keys. **`Array<key>`**
+  - Returns an Array of **`objects`** corresponding to each key. **`Array<{value, ttl?}>`**
+  - ```js
+     let values = myCache.getM(["key1", "key2", ...])
+     for(let value of values) {
+        //access all the value objects. {value, ttl}
+     }
+    ``` 
+### Store a key: (**set()**)
+  - Accepts valid key, value and optional ttl.
+  - Allowed value types: **`number`, `string`, or `object`**.
+  - Allowed ttl type: **`number`** in milliseconds.
+  - Returns a **`boolean`**. True is set was success, else false.
+  - ```js
+    let isSet = myCache.set("key", "value", 1200) // key->value set for 1.2s
+    ```
+### Store multiple keys: (**setM()**)
+  - Accepts an Array of valid set() inputs. **`Array<{key, value, ttl?}>`**
+  - Returns an Array of boolean flags indicating set status. **`Array<boolean>`**
+  - ```js
+    let isSetResponses = myCache.setM([{"k1", "v1", 2500}, {"k2", 15}...])
+    ```
+### Close the cache instance: (**close()**)
+- Accepts **`void`** and returns **`void`**.
+- It is mandatory to invoke **close()** method when cache is no longer needed.
+- ```js
+    let cache = new NodeCache({...options})
+    /** 
+     * work with cache instance..
+    */
+
+    cache.close(); // close worker thread, & free up memory.
+  ```
 
 ---
+
+## 🔖 Contributions
+🔍 Open to ideas and contributions! 
+### License
+**[MIT License](https://github.com/akashchouhan16/nodeCache.js/blob/master/LICENSE "nodeCache.js License")**
+
+### Maintainer
+**[Akash Chouhan](https://github.com/akashchouhan16 "Akash Chouhan")**
