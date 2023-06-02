@@ -47,6 +47,7 @@ let myCache = new NodeCache()
     }) 
     ```
 - Cache instance by default only logs errors. To Configure params for **cache logs**:
+  - Cache log params: **`mode`**, **`type`** and **`path`**
   - ```js
     let myCache = new NodeCache({
         mode: "std" // standard mode allows logs on the std out stream
@@ -56,18 +57,18 @@ let myCache = new NodeCache()
   - Allowed **`mode`** values include: `none`, `std`, `exp`
   - ```js
     let myCache = new NodeCache({
-        type: "Custom Err" // standard mode allows logs on the std out stream
-              // by default, the type is set to error for exceptions, info for rest.
+        type: "Custom Err" // sets a custom log type on all std out stream
+              // defaults to error for exceptions, else as info.
     })
     ```
     **Console output:**
      ```shell
      [🍁 Custom Err] 6/2/23, 4:51 PM: nodeCache.js initialized
      ```
-  - To configure cache log out stream to a specific file path: `wip`
+  - To configure cache log output stream to a specific file path: `wip`
   - ```js
     let myCache = new NodeCache({
-        path: "file://mycache.log" // Currently WIP
+        path: "file://mycache.log" // sets log output stream
                                   // by default, the path is set to none.
     })
     ```
@@ -75,9 +76,9 @@ let myCache = new NodeCache()
 
 ## 💽 APIs
 ### Access a key: (**get()**)
-  - This function accepts a valid key of type: **`number` or `string`**.
-  - Not found or key expired: Returns **`undefined`** if the **key**.
-  - Found: returns the **`value`** of type: **`number`, `string`, or `object`**.
+  - Accepts a valid key of type: **`number` or `string`**.
+  - If not found or the **key** has expired: Returns **`undefined`**.
+  - If found: returns the **`value`** of type: **`number`, `string`, or `object`**.
   - ```js
       let value = myCache.get("key")
     ``` 
@@ -116,6 +117,9 @@ let myCache = new NodeCache()
     cache.close(); // close worker thread, & free up memory.
   ```
 
+### ⚗️ To be included (`wip`)
+- Methods: **getTtl()**, **setTttl()**, **flush()**, **global()**
+- Events: **on(`event_type`)**
 ---
 
 ## 🔖 Contributions
