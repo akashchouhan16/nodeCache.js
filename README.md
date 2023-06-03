@@ -6,7 +6,7 @@
 A Simple, lightweight in-memory cache with TTL support for node.js applications. 
 ## ⛩️ About
 
-Discover an elegant and efficient in-memory cache module for Node.js. This module incorporates a time-to-live (**ttl**) functionality, asynchronously evicting expired keys from the cache.
+Discover an elegant and efficient in-memory cache module for Node.js. This package incorporates time-to-live (**ttl**) functionality, asynchronously evicting expired keys from the cache.
 
 - Support for **up to 1 million keys** that are stored in a single object.
 
