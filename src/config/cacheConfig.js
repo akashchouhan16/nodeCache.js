@@ -11,9 +11,14 @@
  
  * maxKeys: To configure a max cache limit for an instance. Default is -1 (~1mil key limit).
             Accepts numeric data (>0). Setting maxKeys will add a cache limit to the instance.
+
+ * stdTTL: To configure a default ttl with every key value pair saved to the cache instance.
+           Accepts numeric data in ms (>0). Setting stdTTL, will overwrite default ttl = 0 to stdTTL value.
+           stdTTL value of 0 implies ttl is infinite and the key-value will never expire from cache.
 * */
 
 module.exports = cacheConfig = {
     forceString: true,
     maxKeys: -1,
+    stdTTL: 0
 }
