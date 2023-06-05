@@ -3,8 +3,8 @@
  * author: @akashchouhan16
  * *****************************************
 */
-const { Worker, isMainThread, workerData, parentPort } = require("worker_threads")
-const CONSTANTS = require("./utils/constants");
+const { Worker, isMainThread, workerData } = require("worker_threads")
+const CONSTANTS = require("./utils/constants")
 const Logger = require("./utils/logger")
 let cacheConfig = require("./config/cacheConfig")
 
@@ -14,9 +14,10 @@ class NodeCache {
         this.cache = {};
         this.logger = new Logger({ ...options })
 
-        let { forceString, maxKeys } = options
+        let { forceString, maxKeys, stdTTL } = options
         cacheConfig.forceString = forceString !== undefined && typeof forceString === "boolean" ? forceString : cacheConfig.forceString
         cacheConfig.maxKeys = maxKeys !== undefined && typeof maxKeys === "number" && maxKeys > 0 ? maxKeys : cacheConfig.maxKeys
+        cacheConfig.stdTTL = (stdTTL && typeof stdTTL === "number" && stdTTL >= 0) ? stdTTL : cacheConfig.stdTTL
 
 
         if (isMainThread) {
@@ -24,7 +25,7 @@ class NodeCache {
             this.worker.on("message", this._onWorkerMessage.bind(this))
             this.worker.on("error", this.close.bind(this))
 
-            this.worker.postMessage({ cache: this.cache, logger: this.logger, action: "init" })
+            this.worker.postMessage({ cache: this.cache })
         }
 
         this.logger.log(`nodeCache.js initialized`)
@@ -33,14 +34,14 @@ class NodeCache {
     get(key) {
         const cacheItem = this.cache[key];
 
-        // update the context of cache in the worker thread.
-        this.worker.postMessage({ cache: this.cache, logger: this.logger, action: "get" });
-
         if (!cacheItem) {
             this.logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
             return undefined;
         }
         if (cacheItem.ttl && cacheItem.ttl < Date.now()) {
+            // update the context of cache in the worker thread.
+            this.worker.postMessage({ cache: this.cache })
+
             this.delete(key);
             this.logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
             return undefined;
@@ -66,10 +67,10 @@ class NodeCache {
             value = JSON.stringify(value)
         }
 
-        this.cache[key] = { value, ttl: ttl ? Date.now() + ttl : 0 };
+        this.cache[key] = { value, ttl: ttl ? Date.now() + ttl : Date.now() + cacheConfig.stdTTL }
 
         // update the context of cache in the worker thread.
-        this.worker.postMessage({ cache: this.cache, logger: this.logger, action: "set" });
+        // this.worker.postMessage({ cache: this.cache, logger: this.logger, action: "set" })
         return true;
     }
 
@@ -105,6 +106,24 @@ class NodeCache {
 
         return responseObject;
     }
+
+    async refresh() {
+        return new Promise((resolve, reject) => {
+            try {
+                const now = Date.now()
+                for (const [key, cacheItem] of Object.entries(this.cache)) {
+                    if (cacheItem.ttl && Number(cacheItem.ttl) < Number(now)) {
+                        this.delete(key)
+                    }
+                }
+                resolve(this.cache)
+            } catch (error) {
+                reject(`Refresh failed to update cache: ${error.message}`)
+            }
+        })
+
+    }
+
     delete(key) {
         delete this.cache[key];
     }

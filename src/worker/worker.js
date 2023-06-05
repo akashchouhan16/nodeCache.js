@@ -4,7 +4,7 @@
  * *****************************************
 */
 
-const { parentPort, isMainThread } = require('worker_threads');
+const { parentPort, isMainThread, threadId } = require('worker_threads');
 // Listen for most recent cache context from the Main Thread.
 if (!isMainThread) {
     parentPort.on("message", ({ cache, logger }) => {
@@ -17,7 +17,7 @@ if (!isMainThread) {
                 }
             }
         } catch (error) {
-            //TODO
+            console.error(`Exception with nodecache.js::worker (${threadId})  ${error.message}`)
         }
     })
 }
