@@ -60,8 +60,12 @@ class NodeCache {
         if (!key && !value) {
             this.logger.log(CONSTANTS.INVALID_KEY_VALUE)
             return false
-        } else if (!key || !value) {
-            this.logger.log(!key ? CONSTANTS.INVALID_KEY_TYPE : CONSTANTS.INVALID_VALUE_TYPE)
+        } else if (!key || !["string", "number"].includes(typeof key)) {
+            this.logger.log(CONSTANTS.INVALID_KEY_TYPE)
+            return false
+        }
+        else if (!value || !["string", "number", "object"].includes(typeof value)) {
+            this.logger.log(CONSTANTS.INVALID_VALUE_TYPE)
             return false
         }
 
