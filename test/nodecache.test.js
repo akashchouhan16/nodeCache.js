@@ -94,3 +94,135 @@ describe("NodeCache Initialization Tests", () => {
         })
     })
 })
+
+describe("NodeCache services", () => {
+    afterAll(() => {
+        cache.close();
+    })
+    let cache = new NodeCache()
+
+
+    test("NodeCache::global", () => {
+        expect(cache.global()).not.toBe(undefined)
+        expect(typeof cache.global()).toEqual("object")
+        expect(cache.global().keyCount).toEqual(0)
+        expect(cache.global().cacheHit).toEqual(0)
+        expect(cache.global().cacheMiss).toEqual(0)
+    })
+
+    test("NodeCache::flush", () => {
+        cache.setM([
+            { key: 1, value: 'v1' },
+            { key: 2, value: 'v2' }
+        ])
+        cache.getM([
+            1, '2', 'key'
+        ])
+        expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
+        cache.flush();
+        expect(cache.global()).toEqual({ cacheHit: 0, cacheMiss: 0, keyCount: 0 })
+    })
+
+    test("NodeCache::refresh revolve/reject promise on cache refresh", async () => {
+        let value = await cache.refresh()
+        expect(typeof value).toBe("object")
+    })
+
+    test("NodeCache::get with valid key on cache miss", () => {
+        expect(cache.get(123)).toEqual(undefined)
+        expect(cache.get('key')).toEqual(undefined)
+    })
+    test("NodeCache::get with valid key on cache hit", () => {
+        cache.set('k1', 12345)
+        expect(cache.get('k1')).toEqual('12345') // with forceString true by default
+    })
+    test("NodeCache::get with invalid key", () => {
+        expect(cache.get(null)).toEqual(undefined)
+        expect(cache.get(undefined)).toEqual(undefined)
+        expect(cache.get(NaN)).toEqual(undefined)
+        expect(cache.get(false)).toEqual(undefined)
+        expect(cache.get([])).toEqual(undefined)
+        expect(cache.get(0)).toEqual(undefined)
+    })
+    test("NodeCache::set with valid key & value", () => {
+        expect(cache.set(123, 'value')).toEqual(true)
+    })
+    test("NodeCache::set with invalid key or value", () => {
+        expect(cache.set(null, null)).toEqual(false)
+    })
+    test("NodeCache::set with invalid ttl", () => {
+        expect(() => {
+            cache.set(123, 'value', String(Date.now()))
+        }).toThrow(Error)
+
+        let success = cache.set(123, 'value', null)
+        expect(success).not.toBe(undefined)
+
+        expect(() => {
+            cache.set(123, 'value', {})
+        }).toThrow(Error)
+
+        expect(() => {
+            cache.set(123, 'value', [])
+        }).toThrow(Error)
+    })
+    test("NodeCache::set with negative ttl", () => {
+        expect(cache.set(123, 'value', -(Date.now()))).toEqual(true)
+    })
+    test("NodeCache::getM with invalid key - Object", () => {
+        expect(() => {
+            cache.getM({})
+        }).toThrow(Error)
+    })
+    test("NodeCache::getM with invalid key - falsy", () => {
+        expect(() => {
+            cache.getM(undefined)
+        }).toThrow(Error)
+        expect(() => {
+            cache.getM(null)
+        }).toThrow(Error)
+    })
+    test("NodeCache::getM with empty keys array", () => {
+        expect(cache.getM([])).toEqual([])
+    })
+    test("NodeCache::getM with valid keys array", () => {
+        expect(cache.getM([{ key: 1 }, { key: 2 }, { key: 3 }])).toEqual([])
+    })
+
+    test("NodeCache::setM with invalid input", () => {
+        expect(() => {
+            cache.setM({})
+        }).toThrow(Error)
+
+        expect(() => {
+            cache.setM(NaN)
+        }).toThrow(Error)
+
+        expect(() => {
+            cache.setM(0)
+        }).toThrow(Error)
+
+        expect(() => {
+            cache.setM({ key: 726384, value: 'new-value' })
+        }).toThrow(Error)
+
+        expect(() => {
+            cache.setM(undef)
+        }).toThrow(Error)
+    })
+
+    test("NodeCache::setM with empty array", () => {
+        expect(cache.setM([])).toEqual(false)
+    })
+
+    test("NodeCache::setM with valid input", () => {
+        expect(cache.setM([
+            { key: 1, value: 'data1', ttl: 2000 },
+            { key: 2, value: 789 },
+            { key: 3, value: {}, ttl: 3000 },
+            { key: 4, value: null },
+            { key: '5', value: undefined },
+            { key: [], value: {} },
+            { key: [], value: '1234', ttl: 3400 }])).toStrictEqual([true, true, true, false, false, false, false])
+    })
+})
