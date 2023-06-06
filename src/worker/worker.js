@@ -7,7 +7,7 @@
 const { parentPort, isMainThread, threadId } = require('worker_threads');
 // Listen for most recent cache context from the Main Thread.
 if (!isMainThread) {
-    parentPort.on("message", ({ cache, logger }) => {
+    parentPort.on("message", ({ cache }) => {
         try {
             const now = Date.now()
             for (const [key, cacheItem] of Object.entries(cache)) {

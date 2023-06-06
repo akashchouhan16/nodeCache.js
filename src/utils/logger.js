@@ -14,7 +14,7 @@ class Logger {
             dateStyle: "short",
             timeStyle: "short",
             hour12: true,
-        };
+        }
 
         if (validator(options)) {
             this.mode = options.mode || "none" // permitted: [node, std, exp]
@@ -23,7 +23,7 @@ class Logger {
         } else {
             const date = new Date().toLocaleString("en-US", this.formatOptions)
             error(`[🍁 Err] ${date}: ${CONSTANTS.INVALID_INPUT}`)
-            process.exit(1);
+            process.exit(1)
         }
     }
 
@@ -45,29 +45,29 @@ class Logger {
         };
 
 
-        const date = new Date().toLocaleString("en-US", this.formatOptions);
+        const date = new Date().toLocaleString("en-US", this.formatOptions)
 
         switch (Options.type) {
             case "default":
             case "info":
-                log(`[🍁 Info] ${date}: ${message}`);
-                break;
+                log(`[🍁 Info] ${date}: ${message}`)
+                break
             case "warn":
-                warn(`[🍁 Warn] ${date}: ${message}`);
-                break;
+                warn(`[🍁 Warn] ${date}: ${message}`)
+                break
             case "error":
-                error(`[🍁 Error] ${date}: ${message}`);
-                break;
+                error(`[🍁 Error] ${date}: ${message}`)
+                break
             case "fatal":
-                error(`[🍁 Fatal] ${date}: ${message}`);
+                error(`[🍁 Fatal] ${date}: ${message}`)
                 if (Options.mode === "exp") {
                     error(`[🍁 Fatal] ${date}: ${CONSTANTS.TERMINATE_MODE_EXP}`)
-                    process.exit(1);
+                    process.exit(1)
                 }
-                break;
+                break
             default:
                 log(`[🍁 ${Options.type}] ${date}: ${message}`)
-                break;
+                break
         }
     }
 }
