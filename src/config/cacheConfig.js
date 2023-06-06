@@ -20,5 +20,10 @@
 module.exports = cacheConfig = {
     forceString: true,
     maxKeys: -1,
-    stdTTL: 0
+    stdTTL: 0,
+
+    // Global Stats for the cache
+    cacheHit: 0,
+    cacheMiss: 0,
+    keyCount: 0,
 }
