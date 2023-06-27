@@ -129,20 +129,20 @@ describe("NodeCache services", () => {
     })
 
     test("NodeCache::get with valid key on cache miss", () => {
-        expect(cache.get(123)).toEqual(undefined)
-        expect(cache.get('key')).toEqual(undefined)
+        expect(cache.get(123)).toBeUndefined()
+        expect(cache.get('key')).toBeUndefined()
     })
     test("NodeCache::get with valid key on cache hit", () => {
         cache.set('k1', 12345)
         expect(cache.get('k1')).toEqual('12345') // with forceString true by default
     })
     test("NodeCache::get with invalid key", () => {
-        expect(cache.get(null)).toEqual(undefined)
-        expect(cache.get(undefined)).toEqual(undefined)
-        expect(cache.get(NaN)).toEqual(undefined)
-        expect(cache.get(false)).toEqual(undefined)
-        expect(cache.get([])).toEqual(undefined)
-        expect(cache.get(0)).toEqual(undefined)
+        expect(cache.get(null)).toBeUndefined()
+        expect(cache.get(undefined)).toBeUndefined()
+        expect(cache.get(NaN)).toBeUndefined()
+        expect(cache.get(false)).toBeUndefined()
+        expect(cache.get([])).toBeUndefined()
+        expect(cache.get(0)).toBeUndefined()
     })
     test("NodeCache::set with valid key & value", () => {
         expect(cache.set(123, 'value')).toEqual(true)
