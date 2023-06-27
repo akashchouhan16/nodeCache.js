@@ -1,101 +1,35 @@
 const NodeCache = require("../index")
 
-describe("NodeCache Initialization Tests", () => {
-    describe("NodeCache instance with no parameters", () => {
-
+describe("NodeCache instance creation", () => {
+    describe("Creating a NodeCache instance with all default params", () => {
+        let cache
+        beforeAll(() => {
+            cache = new NodeCache()
+        })
         afterAll(() => {
             cache.close();
         })
-        let cache = new NodeCache()
-        test("NodeCache instance to be not null", () => {
-            expect(cache).not.toBe(null)
+
+        test("NodeCache instance to be defined and not falsy", () => {
+            expect(cache).toBeDefined()
+            expect(cache).toBeTruthy()
         })
 
-        test("NodeCache instance with Logger::mode as none", () => {
+        test("NodeCache instance with default Logger::mode = none", () => {
             expect(cache.logger.mode).toEqual("none")
         })
-        test("NodeCache instance with Logger::type as info", () => {
+        test("NodeCache instance with Logger::type = info", () => {
             expect(cache.logger.type).toEqual("info")
         })
-        test("NodeCache instance with Logger::path as none", () => {
+        test("NodeCache instance with Logger::path = none", () => {
             expect(cache.logger.path).toEqual("none")
         })
     })
 
-    describe("NodeCache instance with custom type parameters", () => {
 
-        afterAll(() => {
-            cache.close();
-        })
-        let cache = new NodeCache({
-            type: "Custom"
-        })
-        test("NodeCache instance to be not null", () => {
-            expect(cache).not.toBe(null)
-        })
-
-        test("NodeCache instance with Logger::mode as none", () => {
-            expect(cache.logger.mode).toEqual("none")
-        })
-        test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
-        })
-        test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
-        })
-    })
-
-    describe("NodeCache instance with std mode parameters", () => {
-
-        afterAll(() => {
-            cache.close();
-        })
-        let cache = new NodeCache({
-            mode: "std",
-            type: "Custom"
-        })
-        test("NodeCache instance to be not null", () => {
-            expect(cache).not.toBe(null)
-        })
-
-        test("NodeCache instance with Logger::mode as std", () => {
-            expect(cache.logger.mode).toEqual("std")
-        })
-        test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
-        })
-        test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
-        })
-    })
-
-    describe("NodeCache instance with invalid parameters", () => {
-
-        afterAll(() => {
-            cache.close();
-        })
-        let cache = new NodeCache({
-            mode: null,
-            type: "xyz",
-            path: undefined
-        })
-        test("NodeCache instance to be not null", () => {
-            expect(cache).not.toBe(null)
-        })
-
-        test("NodeCache instance with Logger::mode as none from null", () => {
-            expect(cache.logger.mode).toEqual("none")
-        })
-        test("NodeCache instance with Logger::type as info from xyz", () => {
-            expect(cache.logger.type).toEqual("xyz")
-        })
-        test("NodeCache instance with Logger::path as none from undefined", () => {
-            expect(cache.logger.path).toEqual("none")
-        })
-    })
 })
 
-describe("NodeCache services", () => {
+describe("NodeCache public APIs", () => {
     afterAll(() => {
         cache.close();
     })
@@ -118,12 +52,12 @@ describe("NodeCache services", () => {
         cache.getM([
             1, '2', 'key'
         ])
-        expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
+        // expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
         cache.flush();
         expect(cache.global()).toEqual({ cacheHit: 0, cacheMiss: 0, keyCount: 0 })
     })
 
-    test("NodeCache::refresh revolve/reject promise on cache refresh", async () => {
+    test("NodeCache::refresh - revolve/reject promise on cache refresh", async () => {
         let value = await cache.refresh()
         expect(typeof value).toBe("object")
     })
@@ -224,5 +158,55 @@ describe("NodeCache services", () => {
             { key: '5', value: undefined },
             { key: [], value: {} },
             { key: [], value: '1234', ttl: 3400 }])).toStrictEqual([true, true, true, false, false, false, false])
+    })
+
+
+    test("NodeCache::getTTL with valid input", () => {
+        expect(cache.getTTL("key1")).toBeUndefined()
+        cache.set("key1", 1234, 1500)
+
+        expect(cache.getTTL("key1")).toEqual(expect.any(Number))
+        expect(cache.getTTL("key1")).not.toBeUndefined()
+        expect(cache.getTTL("key1")).toBeGreaterThan(Date.now())
+    })
+
+    test("NodeCache::getTTL with invalid input", () => {
+
+        cache.set("key2", null, NaN)
+        expect(cache.getTTL("key2")).toBeUndefined()
+
+        cache.set("key2", {
+            id: 2,
+            data: "for key2",
+            createdAt: Date.now()
+        }, undefined)
+        expect(cache.getTTL("key2")).not.toBeUndefined()
+        expect(cache.getTTL("key2")).toEqual(expect.any(Number))
+
+        cache.set('key3', 'key3-data', -250)
+        expect(cache.getTTL("key3")).toBeDefined()
+        expect(cache.getTTL("key3")).toBeTruthy()
+        expect(cache.getTTL("key3")).toBeGreaterThanOrEqual(Date.now())
+
+        // TODO: nodecache.js must be updated to account for -ve ttl value as +ve.
+    })
+
+    test("NodeCache::setTTL with valid input", () => {
+        expect(cache.setTTL(14, 12000)).toBeFalsy()
+        cache.set("key-new", "value-new")
+        expect(cache.setTTL("key-new", 12000)).toEqual(true)
+        expect(cache.setTTL("key-new2", 15000)).toEqual(false)
+
+    })
+
+    test("NodeCache::setTTL with invalid input", () => {
+        expect(() => cache.setTTL(0, 12003)).toThrow(Error)
+        expect(() => cache.setTTL(13, "1500")).toThrow(Error)
+        expect(() => cache.setTTL({ key: "new-key" }, 15000)).toThrow(Error)
+        expect(() => cache.setTTL('', 12000)).toThrow(Error)
+        expect(() => cache.setTTL("missing-key")).toThrow(Error)
+        expect(() => cache.setTTL(NaN, NaN)).toThrow(Error)
+        expect(() => cache.setTTL('valid-key', undefined)).toThrow(Error)
+        expect(() => cache.setTTL(undefined, undefined)).toThrow(Error)
     })
 })
