@@ -11,7 +11,7 @@ branches:
 script:
   - echo '-> ------------- Starting nodecache.js Build -------------'
   - echo '-> Installing Dependencies...'
-  - npm install
+  - npm ci
   - echo '-> Running Unit Tests...'
   - npm test
 
