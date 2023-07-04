@@ -8,9 +8,11 @@
 
 const config = {
     displayName: {
-        name: "nodeCache Unit Tests",
-        color: "magentaBright"
+        name: "NodeCache.js (npm package) Unit Tests",
+        color: "cyan"
     },
+    verbose: true,
+    bail: 1,
     forceCoverageMatch: ["**/*.test.js"],
     testEnvironment: "node",
 };
