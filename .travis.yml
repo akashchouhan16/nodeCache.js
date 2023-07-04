@@ -2,10 +2,10 @@ language: node_js
 node_js:
   - "14"
   - "18"
-  
+
 branches:
   only:
-    - main
+    - master
     - production
 
 script:
