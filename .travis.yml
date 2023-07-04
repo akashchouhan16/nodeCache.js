@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "14"
+  - "16"
+  - "18"
+script:
+  - echo '-> ------------- Starting nodecache.js Build -------------'
+  - echo '-> Installing Dependencies...'
+  - npm install
+  - echo '-> Running Unit Tests...'
+  - npm test
