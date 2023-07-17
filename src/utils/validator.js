@@ -5,8 +5,9 @@
 */
 
 const { error } = require("console")
+const CONSTANTS = require("./constants")
 
-module.exports = validator = (options = {}) => {
+let validator = (options = {}) => {
     let isModeValid = true
     let isPathValid = true
     const date = new Date().toLocaleString("en-US", this.formatOptions)
@@ -32,3 +33,4 @@ module.exports = validator = (options = {}) => {
 
     return isModeValid && isPathValid
 }
+module.exports = validator
