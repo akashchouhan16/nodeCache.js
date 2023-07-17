@@ -17,7 +17,7 @@
            stdTTL value of 0 implies ttl is infinite and the key-value will never expire from cache.
 * */
 
-module.exports = cacheConfig = {
+let cacheConfig = {
     forceString: true,
     maxKeys: -1,
     stdTTL: 0,
@@ -27,3 +27,5 @@ module.exports = cacheConfig = {
     cacheMiss: 0,
     keyCount: 0,
 }
+
+module.exports = cacheConfig;
