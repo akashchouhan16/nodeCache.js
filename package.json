@@ -4,7 +4,9 @@
   "description": "Simple, Intuitive in-memory cache with TTL support for Node.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint .  --ext .js",
+    "lint-fix": "eslint --fix .  --ext .js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,8 @@
   },
   "homepage": "https://github.com/akashchouhan16/nodeCache#readme",
   "devDependencies": {
+    "eslint": "^8.45.0",
+    "eslint-plugin-jest": "^27.2.3",
     "jest": "^29.5.0"
   }
 }

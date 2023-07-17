@@ -46,11 +46,11 @@ describe("NodeCache public APIs", () => {
 
     test("NodeCache::flush", () => {
         cache.setM([
-            { key: 1, value: 'v1' },
-            { key: 2, value: 'v2' }
+            { key: 1, value: "v1" },
+            { key: 2, value: "v2" }
         ])
         cache.getM([
-            1, '2', 'key'
+            1, "2", "key"
         ])
         // expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
         cache.flush();
@@ -64,11 +64,11 @@ describe("NodeCache public APIs", () => {
 
     test("NodeCache::get with valid key on cache miss", () => {
         expect(cache.get(123)).toBeUndefined()
-        expect(cache.get('key')).toBeUndefined()
+        expect(cache.get("key")).toBeUndefined()
     })
     test("NodeCache::get with valid key on cache hit", () => {
-        cache.set('k1', 12345)
-        expect(cache.get('k1')).toEqual('12345') // with forceString true by default
+        cache.set("k1", 12345)
+        expect(cache.get("k1")).toEqual("12345") // with forceString true by default
     })
     test("NodeCache::get with invalid key", () => {
         expect(cache.get(null)).toBeUndefined()
@@ -79,29 +79,29 @@ describe("NodeCache public APIs", () => {
         expect(cache.get(0)).toBeUndefined()
     })
     test("NodeCache::set with valid key & value", () => {
-        expect(cache.set(123, 'value')).toEqual(true)
+        expect(cache.set(123, "value")).toEqual(true)
     })
     test("NodeCache::set with invalid key or value", () => {
         expect(cache.set(null, null)).toEqual(false)
     })
     test("NodeCache::set with invalid ttl", () => {
         expect(() => {
-            cache.set(123, 'value', String(Date.now()))
+            cache.set(123, "value", String(Date.now()))
         }).toThrow(Error)
 
-        let success = cache.set(123, 'value', null)
+        let success = cache.set(123, "value", null)
         expect(success).not.toBe(undefined)
 
         expect(() => {
-            cache.set(123, 'value', {})
+            cache.set(123, "value", {})
         }).toThrow(Error)
 
         expect(() => {
-            cache.set(123, 'value', [])
+            cache.set(123, "value", [])
         }).toThrow(Error)
     })
     test("NodeCache::set with negative ttl", () => {
-        expect(cache.set(123, 'value', -(Date.now()))).toEqual(true)
+        expect(cache.set(123, "value", -(Date.now()))).toEqual(true)
     })
     test("NodeCache::getM with invalid key - Object", () => {
         expect(() => {
@@ -137,11 +137,11 @@ describe("NodeCache public APIs", () => {
         }).toThrow(Error)
 
         expect(() => {
-            cache.setM({ key: 726384, value: 'new-value' })
+            cache.setM({ key: 726384, value: "new-value" })
         }).toThrow(Error)
 
         expect(() => {
-            cache.setM(undef)
+            cache.setM(undefined)
         }).toThrow(Error)
     })
 
@@ -151,13 +151,13 @@ describe("NodeCache public APIs", () => {
 
     test("NodeCache::setM with valid input", () => {
         expect(cache.setM([
-            { key: 1, value: 'data1', ttl: 2000 },
+            { key: 1, value: "data1", ttl: 2000 },
             { key: 2, value: 789 },
             { key: 3, value: {}, ttl: 3000 },
             { key: 4, value: null },
-            { key: '5', value: undefined },
+            { key: "5", value: undefined },
             { key: [], value: {} },
-            { key: [], value: '1234', ttl: 3400 }])).toStrictEqual([true, true, true, false, false, false, false])
+            { key: [], value: "1234", ttl: 3400 }])).toStrictEqual([true, true, true, false, false, false, false])
     })
 
 
@@ -183,7 +183,7 @@ describe("NodeCache public APIs", () => {
         expect(cache.getTTL("key2")).not.toBeUndefined()
         expect(cache.getTTL("key2")).toEqual(expect.any(Number))
 
-        cache.set('key3', 'key3-data', -250)
+        cache.set("key3", "key3-data", -250)
         expect(cache.getTTL("key3")).toBeDefined()
         expect(cache.getTTL("key3")).toBeTruthy()
         expect(cache.getTTL("key3")).toBeGreaterThanOrEqual(Date.now())
@@ -203,10 +203,10 @@ describe("NodeCache public APIs", () => {
         expect(() => cache.setTTL(0, 12003)).toThrow(Error)
         expect(() => cache.setTTL(13, "1500")).toThrow(Error)
         expect(() => cache.setTTL({ key: "new-key" }, 15000)).toThrow(Error)
-        expect(() => cache.setTTL('', 12000)).toThrow(Error)
+        expect(() => cache.setTTL("", 12000)).toThrow(Error)
         expect(() => cache.setTTL("missing-key")).toThrow(Error)
         expect(() => cache.setTTL(NaN, NaN)).toThrow(Error)
-        expect(() => cache.setTTL('valid-key', undefined)).toThrow(Error)
+        expect(() => cache.setTTL("valid-key", undefined)).toThrow(Error)
         expect(() => cache.setTTL(undefined, undefined)).toThrow(Error)
     })
 })
