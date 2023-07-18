@@ -4,7 +4,7 @@
  * *****************************************
 */
 
-module.exports = CONSTANTS = {
+const CONSTANTS = {
     INVALID_MOD: `Invalid mode value. Only "none", "std", or "exp" are allowed`,
     INVALID_TYPE: `Invalid type value. Only "default", "info", "warn", "error", or "fatal" are allowed`,
     INVALID_PATH: `Invalid path value. Only "none", "console", or "file" are allowed`,
@@ -21,3 +21,5 @@ module.exports = CONSTANTS = {
     ITEM_NOTFOUND: `No item not found with the provided key`,
     WORKER_ERROR: `Error with the worker thread`
 }
+
+module.exports = CONSTANTS

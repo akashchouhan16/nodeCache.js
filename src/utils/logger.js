@@ -7,6 +7,8 @@
 const { log, warn, error } = require("console")
 const CONSTANTS = require("./constants")
 const validator = require("./validator")
+const process = require("node:process")
+
 class Logger {
     constructor(options = {}) {
 

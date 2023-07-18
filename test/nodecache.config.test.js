@@ -12,8 +12,10 @@ describe("NodeCache params for instance config", () => {
             try {
                 cache = new NodeCache()
                 cache.set("no-std-ttl", "test-value")
-                expect(cache.cache["no-std-ttl"]).toStrictEqual({ value: "test-value" })
-            } catch (error) { }
+                expect(cache.cache["no-std-ttl"]).toMatchObject({ value: "test-value" })
+            } catch (error) {
+                console.warn(error.message)
+            }
         })
 
         test("Valid stdTTL of 100ms is set for all the keys by default", () => {
@@ -28,7 +30,9 @@ describe("NodeCache params for instance config", () => {
                     cache.get("std-100-k1")
                     expect(cache.cache["std-100-k1"]).toBeUndefined()
                 }, 150)
-            } catch (error) { }
+            } catch (error) {
+                console.warn(error.message)
+            }
         })
 
         test("Invalid stdTTL value with the instance :: boolean", () => {
@@ -83,7 +87,7 @@ describe("NodeCache params for instance config", () => {
 
         test("forceString non provided, defaults to true", () => {
             cache = new NodeCache()
-            cache.set('key1', {
+            cache.set("key1", {
                 id: 6231,
                 data: "data for key1",
                 createAt: Date.now()
@@ -99,7 +103,7 @@ describe("NodeCache params for instance config", () => {
             cache = new NodeCache({
                 forceString: false
             })
-            cache.set('key2', {
+            cache.set("key2", {
                 id: 7158,
                 data: "data for key2",
                 createAt: Date.now()

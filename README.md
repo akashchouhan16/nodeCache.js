@@ -1,9 +1,11 @@
-# 🍁 nodeCache.js
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/package-unit-tests.yml?&label=%20Node.js%20CI%20build)
+![nodecache.js](https://github.com/akashchouhan16/nodeCache.js/assets/56465610/2b208713-bd6b-4a74-b63a-9ee197f1773f)
+
+![Travis Build Status](https://img.shields.io/travis/com/akashchouhan16/nodecache.js?label=Travis+CI+build&color=F2ECAC)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/package-unit-tests.yml?&label=%20Node.js%20CI)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-1dbf73.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js is actively Maintained")
 [![made-for-Developers](https://img.shields.io/badge/Made%20for-Developers-238636.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js")
 
-A Simple, lightweight in-memory cache with TTL support for node.js applications. 
+A Simple and Intuitive in-memory cache with TTL support for node.js applications.
 ## ⛩️ About
 
 Discover an elegant and efficient in-memory cache module for Node.js. This package incorporates time-to-live (**ttl**) functionality, asynchronously evicting expired keys from the cache.
@@ -162,14 +164,12 @@ let myCache = new NodeCache()
     ```
 
 ### ⚗️ To Do (`wip`)
-- Node.js Events: **on(`event_type`)**: Support for **on `initialize`**, **`close`**,  **`get`**, **`set`**, **`delete`**, **`flush`**, **`refresh`**, etc.
-- Optimizations on existing ttl implementation and cache eviction policy.
+- Node.js Events: **on(`event_type`)**: Support for **initialize**, **close**,  **get**, **set**, **delete**, **flush**, and **refresh**.
+- Optimizations on existing ttl implementation and the cache eviction policy.
 ---
 
-## 🔖 Contributions
-🔍 Open to ideas and contributions! 
-### License
-**[MIT License](https://github.com/akashchouhan16/nodeCache.js/blob/master/LICENSE "nodeCache.js License")**
-
-### Maintainer
-**[Akash Chouhan](https://github.com/akashchouhan16 "Akash Chouhan")**
+## 🔖 Contributing
+If you're interested to contribute or brain storm ideas, Contributions are most welcomed! </br>
+Reach out to: **[akash.c1500@gmail.com](mailto:akash.c1500@gmail.com "Akash's Gmail")**  
+## 📜 License
+Copyright (c) **[Akash Chouhan](https://github.com/akashchouhan16 "Akash Chouhan")**. All rights reserved. Released under the **[MIT License](https://github.com/akashchouhan16/nodeCache.js/blob/master/LICENSE "nodeCache.js License")**.
