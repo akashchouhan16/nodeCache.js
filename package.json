@@ -1,6 +1,6 @@
 {
   "name": "nodecache.js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Simple, Intuitive in-memory cache with TTL support for Node.",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,10 @@
   },
   "keywords": [
     "cache",
+    "storage",
     "node-cache",
     "nodecache",
-    "in-memory storage",
+    "in-memory",
     "node.js cache",
     "cache with ttl"
   ],
