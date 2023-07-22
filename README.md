@@ -1,4 +1,5 @@
-![nodecache.js](https://github.com/akashchouhan16/nodeCache.js/assets/56465610/2b208713-bd6b-4a74-b63a-9ee197f1773f)
+![nodecache.js](https://github.com/akashchouhan16/nodeCache.js/assets/56465610/3c72f526-73f2-4528-b01d-d188532b8231)
+
 
 ![Travis Build Status](https://img.shields.io/travis/com/akashchouhan16/nodecache.js?label=Travis+CI+build&color=F2ECAC)
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/package-unit-tests.yml?&label=%20Node.js%20CI)
