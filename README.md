@@ -1,11 +1,12 @@
-![nodecache.js](https://github.com/akashchouhan16/nodeCache.js/assets/56465610/2b208713-bd6b-4a74-b63a-9ee197f1773f)
+![nodecache.js](https://github.com/akashchouhan16/nodeCache.js/assets/56465610/3c72f526-73f2-4528-b01d-d188532b8231)
+
 
 ![Travis Build Status](https://img.shields.io/travis/com/akashchouhan16/nodecache.js?label=Travis+CI+build&color=F2ECAC)
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/package-unit-tests.yml?&label=%20Node.js%20CI)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-1dbf73.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js is actively Maintained")
 [![made-for-Developers](https://img.shields.io/badge/Made%20for-Developers-238636.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js")
 
-A Simple and Intuitive in-memory cache with TTL support for node.js applications.
+A simple and intuitive in-memory cache with TTL support for your JavaScript applications.
 ## ⛩️ About
 
 Discover an elegant and efficient in-memory cache module for Node.js. This package incorporates time-to-live (**ttl**) functionality, asynchronously evicting expired keys from the cache.
@@ -16,13 +17,9 @@ Discover an elegant and efficient in-memory cache module for Node.js. This packa
 
 
 ## 📜 Installation
-- You can install nodecache via npm:
-    ```shell
-    npm i nodecache.js
-    ```
-- Alternatively, you can save the latest dependency:
-    ```shell
-    npm i nodecache.js@latest --save
+- You can install nodecache.js via npm:
+    ```properties
+    npm install nodecache.js
     ```
 
 
