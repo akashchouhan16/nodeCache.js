@@ -30,11 +30,14 @@ describe("NodeCache instance creation", () => {
 })
 
 describe("NodeCache public APIs", () => {
+    let cache
+    beforeAll(() => {
+        cache = new NodeCache()
+    })
+
     afterAll(() => {
         cache.close();
     })
-    let cache = new NodeCache()
-
 
     test("NodeCache::global", () => {
         expect(cache.global()).not.toBe(undefined)
@@ -161,13 +164,23 @@ describe("NodeCache public APIs", () => {
     })
 
 
-    test("NodeCache::getTTL with valid input", () => {
+    test("NodeCache::getTTL with valid input <string key>", () => {
         expect(cache.getTTL("key1")).toBeUndefined()
         cache.set("key1", 1234, 1500)
 
         expect(cache.getTTL("key1")).toEqual(expect.any(Number))
         expect(cache.getTTL("key1")).not.toBeUndefined()
         expect(cache.getTTL("key1")).toBeGreaterThan(Date.now())
+    })
+
+    test("NodeCache::getTTL with valid input <numeric key>", () => {
+        const key = 174
+        expect(cache.getTTL(key)).toBeUndefined()
+        cache.set(key, { _id: "eY1hIwq82nmDqpfd29", data: 1234 }, 1500)
+
+        expect(cache.getTTL(key)).toEqual(expect.any(Number))
+        expect(cache.getTTL(key)).not.toBeUndefined()
+        expect(cache.getTTL(key)).toBeGreaterThan(Date.now())
     })
 
     test("NodeCache::getTTL with invalid input", () => {
@@ -187,16 +200,34 @@ describe("NodeCache public APIs", () => {
         expect(cache.getTTL("key3")).toBeDefined()
         expect(cache.getTTL("key3")).toBeTruthy()
         expect(cache.getTTL("key3")).toBeGreaterThanOrEqual(Date.now())
-
-        // TODO: nodecache.js must be updated to account for -ve ttl value as +ve.
     })
 
-    test("NodeCache::setTTL with valid input", () => {
-        expect(cache.setTTL(14, 12000)).toBeFalsy()
-        cache.set("key-new", "value-new")
-        expect(cache.setTTL("key-new", 12000)).toEqual(true)
-        expect(cache.setTTL("key-new2", 15000)).toEqual(false)
+    test("NodeCache::getTTL with negative ttl input", () => {
+        cache.set("test_key", 195, -3600)
+        const ttl = cache.getTTL("test_key")
+        expect(ttl).toBeDefined()
+        expect(ttl).not.toBeLessThan(0)
+    })
 
+    test("NodeCache::setTTL with valid input for new key", () => {
+        const key = "key-" + Date.now()
+        expect(cache.setTTL(14, 12000)).toBeFalsy()
+        expect(cache.setTTL(key, 12000)).toBeFalsy()
+    })
+
+    test("NodeCache::setTTL with valid input for existing key", () => {
+        const key = "key-" + Date.now()
+        cache.set(key, "value-" + key)
+        cache.set(210, { data: "value-210", ttl: 1000 })
+        expect(cache.setTTL(key, 3600)).toBeTruthy()
+        expect(cache.setTTL(210, 7890)).toBeTruthy()
+    })
+
+    test("NodeCache::setTTL with negative ttl", () => {
+        const key = "key#" + Date.now()
+        expect(cache.setTTL(key, -4800)).toBeFalsy()
+        cache.set(key, "value-" + key)
+        expect(cache.setTTL(key, -4800)).toBeTruthy()
     })
 
     test("NodeCache::setTTL with invalid input", () => {
