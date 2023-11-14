@@ -15,6 +15,6 @@ const config = {
     bail: 1,
     forceCoverageMatch: ["**/*.test.js"],
     testEnvironment: "node",
-};
+}
 
-module.exports = config;
+module.exports = config

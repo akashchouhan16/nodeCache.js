@@ -139,11 +139,11 @@ class NodeCache {
         }
 
         if (!this.cache[key])
-            return false;
+            return false
 
         const newTTL = Date.now() + Math.abs(ttl)
         this.cache[key].ttl = newTTL
-        return true;
+        return true
     }
 
     async refresh() {
@@ -173,9 +173,9 @@ class NodeCache {
     }
 
     flush() {
-        cacheConfig.cacheHit = 0;
-        cacheConfig.cacheMiss = 0;
-        cacheConfig.keyCount = 0;
+        cacheConfig.cacheHit = 0
+        cacheConfig.cacheMiss = 0
+        cacheConfig.keyCount = 0
         this.cache = {}
     }
 
