@@ -28,4 +28,4 @@ let cacheConfig = {
     keyCount: 0,
 }
 
-module.exports = cacheConfig;
+module.exports = cacheConfig

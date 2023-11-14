@@ -3,7 +3,7 @@ const NodeCache = require("../index")
 
 describe("NodeCache params for instance config", () => {
     describe("StdTTL config checks", () => {
-        let cache;
+        let cache
         afterEach(() => {
             cache.close()
         })
@@ -40,7 +40,7 @@ describe("NodeCache params for instance config", () => {
                 stdTTL: true
             })
             // expect the stdTTL to be 0 => Infinite.
-            cache.set("k1", "boolean-ttl-check");
+            cache.set("k1", "boolean-ttl-check")
             expect(cache.cache["k1"]).toHaveProperty("ttl")
             expect(cache.cache["k1"]).toMatchObject({
                 value: expect.anything(),
@@ -54,7 +54,7 @@ describe("NodeCache params for instance config", () => {
                 stdTTL: "15000" // 15seconds
             })
             // expect the stdTTL to be 0 => Infinite.
-            cache.set("k2", "string-ttl-check");
+            cache.set("k2", "string-ttl-check")
             expect(cache.cache["k2"]).toHaveProperty("ttl")
             expect(cache.cache["k2"]).toMatchObject({
                 value: expect.anything(),
@@ -68,7 +68,7 @@ describe("NodeCache params for instance config", () => {
                 stdTTL: NaN // falsy values: 0, false, null, undefined, NaN, ''
             })
             // expect the stdTTL to be 0 => Infinite.
-            cache.set("k3", "falsy-check");
+            cache.set("k3", "falsy-check")
             expect(cache.cache["k3"]).toHaveProperty("ttl")
             expect(cache.cache["k3"]).toMatchObject({
                 value: expect.anything(),
@@ -93,7 +93,7 @@ describe("NodeCache params for instance config", () => {
                 createAt: Date.now()
             })
 
-            let { value } = cache.cache["key1"];
+            let { value } = cache.cache["key1"]
 
             expect(value).not.toBeUndefined()
             expect(value).toEqual(expect.any(String)) // not an object anymore
@@ -109,7 +109,7 @@ describe("NodeCache params for instance config", () => {
                 createAt: Date.now()
             })
 
-            let { value } = cache.cache["key2"];
+            let { value } = cache.cache["key2"]
 
             expect(value).not.toBeUndefined()
             expect(value).toEqual(expect.any(Object))
@@ -125,7 +125,7 @@ describe("NodeCache params for instance config", () => {
 
         test("maxKeys not provided, defaults to -1 (No Limit)", () => {
             cache = new NodeCache()
-            let flag = true;
+            let flag = true
             for (let i = 1; i <= 6; i++) {
                 let success = cache.set(i, `value-${i}`)
                 flag = flag & success
@@ -159,7 +159,7 @@ describe("NodeCache params for instance config", () => {
             })
         })
         afterAll(() => {
-            cache.close();
+            cache.close()
         })
 
         test("NodeCache instance to be not null", () => {
@@ -180,7 +180,7 @@ describe("NodeCache params for instance config", () => {
     describe("Custom Logger prompt check for the instance on mode = std", () => {
 
         afterAll(() => {
-            cache.close();
+            cache.close()
         })
         let cache = new NodeCache({
             mode: "std",
@@ -210,7 +210,7 @@ describe("NodeCache params for instance config", () => {
             })
         })
         afterAll(() => {
-            cache.close();
+            cache.close()
         })
 
         test("Valid Instance with default params for logger", () => {

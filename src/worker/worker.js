@@ -4,7 +4,7 @@
  * *****************************************
 */
 
-const { parentPort, isMainThread, threadId } = require("worker_threads");
+const { parentPort, isMainThread, threadId } = require("worker_threads")
 // Listen for most recent cache context from the Main Thread.
 if (!isMainThread) {
     parentPort.on("message", ({ cache }) => {
@@ -13,7 +13,7 @@ if (!isMainThread) {
             for (const [key, cacheItem] of Object.entries(cache)) {
                 if (cacheItem.ttl && Number(cacheItem.ttl) < Number(now)) {
                     // Send key with expired ttl to Main Thread for cache eviction.
-                    parentPort.postMessage({ key });
+                    parentPort.postMessage({ key })
                 }
             }
         } catch (error) {
