@@ -7,7 +7,7 @@ describe("NodeCache instance creation", () => {
             cache = new NodeCache()
         })
         afterAll(() => {
-            cache.close();
+            cache.close()
         })
 
         test("NodeCache instance to be defined and not falsy", () => {
@@ -36,7 +36,7 @@ describe("NodeCache public APIs", () => {
     })
 
     afterAll(() => {
-        cache.close();
+        cache.close()
     })
 
     test("NodeCache::global", () => {
@@ -56,7 +56,7 @@ describe("NodeCache public APIs", () => {
             1, "2", "key"
         ])
         // expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
-        cache.flush();
+        cache.flush()
         expect(cache.global()).toEqual({ cacheHit: 0, cacheMiss: 0, keyCount: 0 })
     })
 

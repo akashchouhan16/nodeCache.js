@@ -31,7 +31,7 @@ class Logger {
 
     log(message, options = {}) {
         if (!message || this.mode === "none")
-            return;
+            return
         if (typeof message !== "string") {
             if (typeof message === "object") {
                 message = JSON.stringify(message)
@@ -44,7 +44,7 @@ class Logger {
             type: this.type,
             path: this.path,
             ...options
-        };
+        }
 
 
         const date = new Date().toLocaleString("en-US", this.formatOptions)
