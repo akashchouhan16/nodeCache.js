@@ -22,6 +22,7 @@ module.exports = {
     },
     "ignorePatterns": ["/dist/", "/tests/", "/*.mjs"],
     "rules": {
-        quotes: ["error", "double", { "allowTemplateLiterals": true }]
+        quotes: ["error", "double", { "allowTemplateLiterals": true }],
+        "semi": ["warn", "never"]
     }
 }
