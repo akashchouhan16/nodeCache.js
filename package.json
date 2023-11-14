@@ -14,9 +14,10 @@
   },
   "keywords": [
     "cache",
+    "storage",
     "node-cache",
     "nodecache",
-    "in-memory storage",
+    "in-memory",
     "node.js cache",
     "cache with ttl"
   ],

@@ -4,6 +4,7 @@ const NodeCache = require("../index")
 describe("NodeCache params for instance config", () => {
 
     describe("NodeCache params - all invalid", () => {
+
         let cache
         afterEach(() => {
             cache.close()
@@ -120,6 +121,7 @@ describe("NodeCache params for instance config", () => {
                 stdTTL: "15000" // 15seconds
             })
             // expect the stdTTL to be 0 => Infinite.
+
             cache.set("std-boolean", "string-ttl-check")
             expect(cache.cache["std-boolean"]).toStrictEqual({
                 value: expect.any(String),
