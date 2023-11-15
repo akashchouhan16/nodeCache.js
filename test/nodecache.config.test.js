@@ -244,6 +244,82 @@ describe("NodeCache params for instance config", () => {
             expect(cache.cache[6]).toBeUndefined()
         })
     })
+    describe("NodeCache valueOnly configurations: Default (true) case", () => {
+        let cache
+        beforeEach(() => {
+            cache = new NodeCache({
+                //    valueOnly: true // By default valueOnly is set to true -> backward compatibility with older npm versions.
+            })
+        })
+        afterEach(() => {
+            cache.close()
+        })
+
+        test("When not valueOnly flag with the instance", () => {
+            expect(cache.config["valueOnly"]).toEqual(true)
+        })
+
+        test("When using Get() and Set() calls - true case", () => {
+            cache.set(151123, { _id: "nC11Hque81", value: "test-data" })
+            expect(cache.get(151123)).toStrictEqual({ _id: "nC11Hque81", value: "test-data" })
+
+            cache.set(1511232, { _id: "nC11Hque82", value: "test-data-2" }, 60 * 1000)
+            expect(cache.get(1511232)).toStrictEqual({ _id: "nC11Hque82", value: "test-data-2" })
+        })
+
+        test("When using getM() and setM() calls - true case", () => {
+            const input = [{ key: 1511235, value: "test-data-5" }, { key: 1511236, value: "test-data-6", ttl: 2 * 60 * 1000 }]
+            cache.setM(input)
+
+            const responses = cache.getM([1511235, 1511236])
+            responses.forEach(response => {
+                expect(response).toStrictEqual(expect.any(String))
+            })
+        })
+    })
+
+    describe("NodeCache valueOnly configurations: New (false) case", () => {
+        let cache
+        beforeEach(() => {
+            cache = new NodeCache({
+                valueOnly: false
+            })
+        })
+        afterEach(() => {
+            cache.close()
+        })
+
+        test("When not valueOnly flag with the instance", () => {
+            expect(cache.config["valueOnly"]).toEqual(false)
+        })
+
+        test("When using get() and set() calls - false case", () => {
+            cache.set(1511233, { _id: "nC11Hque83", value: "test-data-3" })
+            expect(cache.get(1511233)).toStrictEqual({
+                value: expect.any(Object),
+                ttl: expect.any(Number)
+            })
+
+            cache.set(1511234, { _id: "nC11Hque84", value: "test-data-4" }, 60 * 1000)
+            expect(cache.get(1511234)).toStrictEqual({
+                value: expect.any(Object),
+                ttl: expect.any(Number)
+            })
+        })
+
+        test("When using getM() and setM() calls - false case", () => {
+            const input = [{ key: 1511235, value: "test-data-5" }, { key: 1511236, value: "test-data-6", ttl: 2 * 60 * 1000 }]
+            cache.setM(input)
+
+            const responses = cache.getM([1511235, 1511236])
+            responses.forEach(response => {
+                expect(response).toStrictEqual({
+                    value: expect.any(String),
+                    ttl: expect.any(Number)
+                })
+            })
+        })
+    })
 
     describe("NodeCache Logger configurations for the instance (type: custom)", () => {
         let cache

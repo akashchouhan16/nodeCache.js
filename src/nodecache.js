@@ -15,11 +15,13 @@ class NodeCache {
         this.cache = {}
         this.logger = new Logger({ ...options })
 
-        let { forceString, maxKeys, stdTTL } = options
+        let { forceString, maxKeys, stdTTL, valueOnly } = options
+        cacheConfig.valueOnly = valueOnly !== undefined && typeof valueOnly === "boolean" ? valueOnly : cacheConfig.valueOnly
         cacheConfig.forceString = forceString !== undefined && typeof forceString === "boolean" ? forceString : cacheConfig.forceString
         cacheConfig.maxKeys = maxKeys !== undefined && typeof maxKeys === "number" && maxKeys > 0 ? maxKeys : cacheConfig.maxKeys
         cacheConfig.stdTTL = (stdTTL && typeof stdTTL === "number" && stdTTL >= 0) ? stdTTL : cacheConfig.stdTTL
 
+        this.config = { ...cacheConfig }
 
         if (isMainThread) {
             this.worker = new Worker(path.join(__dirname, "/worker/worker.js"))
@@ -53,7 +55,10 @@ class NodeCache {
         }
 
         cacheConfig.cacheHit += 1
-        return cacheItem.value
+        if (cacheConfig.valueOnly) {
+            return cacheItem.value
+        }
+        return cacheItem
     }
 
     set(key, value, ttl) {
@@ -105,7 +110,7 @@ class NodeCache {
         if (!Array.isArray(values)) {
             throw new Error(CONSTANTS.INVALID_SETM_INPUT)
         } else if (values.length === 0) {
-            return false
+            return [false]
         }
 
         if (cacheConfig.maxKeys > 0 && cacheConfig.maxKeys <= values.length) {
@@ -115,7 +120,7 @@ class NodeCache {
         let responseObject = []
         for (let data of values) {
             let { key, value, ttl } = data
-            responseObject.push(this.set(key, value, ttl ? ttl : 0))
+            responseObject.push(this.set(key, value, ttl))
         }
 
         return responseObject
@@ -157,7 +162,7 @@ class NodeCache {
                 }
                 resolve(this.cache)
             } catch (error) {
-                reject(`Refresh failed to update cache: ${error.message}`)
+                reject(new Error(`Refresh failed to update cache: ${error.message}`))
             }
         })
 
