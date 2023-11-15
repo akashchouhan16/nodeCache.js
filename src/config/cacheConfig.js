@@ -15,10 +15,15 @@
  * stdTTL: To configure a default ttl with every key value pair saved to the cache instance.
            Accepts numeric data in ms (>0). Setting stdTTL, will overwrite default ttl = 0 to stdTTL value.
            stdTTL value of 0 implies ttl is infinite and the key-value will never expire from cache.
+
+* valueOnly: To configure the response from the get() and getM() API.
+             Accepts boolean. By default, it's set to true and get calls will only the associated value for a key.
+             When set to false, get() or its derivative getM() call will return {value, ttl} object for a particular key.
 * */
 
 let cacheConfig = {
     forceString: true,
+    valueOnly: true,
     maxKeys: -1,
     stdTTL: 0,
 
