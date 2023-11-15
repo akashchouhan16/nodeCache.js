@@ -149,7 +149,7 @@ describe("NodeCache public APIs", () => {
     })
 
     test("NodeCache::setM with empty array", () => {
-        expect(cache.setM([])).toEqual(false)
+        expect(cache.setM([])).toEqual([false])
     })
 
     test("NodeCache::setM with valid input", () => {
