@@ -11,9 +11,10 @@ let cacheConfig = require("./config/cacheConfig")
 
 
 class NodeCache {
+    #logger;
     constructor(options = {}) {
         this.cache = {}
-        this.logger = new Logger({ ...options })
+        this.#logger = new Logger({ ...options })
 
         let { forceString, maxKeys, stdTTL, valueOnly } = options
         cacheConfig.valueOnly = valueOnly !== undefined && typeof valueOnly === "boolean" ? valueOnly : cacheConfig.valueOnly
@@ -27,13 +28,17 @@ class NodeCache {
             this.worker = new Worker(path.join(__dirname, "/worker/worker.js"))
             this.worker.on("message", this._onWorkerMessage.bind(this))
             this.worker.on("error", (err) => {
-                this.logger.log(`${err.message}`, { type: "Worker Error" })
+                this.#logger.log(`${err.message}`, { type: "Worker Error" })
             })
 
             this.worker.postMessage({ cache: this.cache })
         }
 
-        this.logger.log(`nodeCache.js initialized`)
+        this.#logger.log(`nodeCache.js initialized`)
+    }
+
+    getLogConfig() {
+        return this.#logger;
     }
 
     get(key) {
@@ -41,7 +46,7 @@ class NodeCache {
 
         if (!cacheItem) {
             cacheConfig.cacheMiss += 1
-            this.logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
+            this.#logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
             return undefined
         }
         if (cacheItem.ttl && cacheItem.ttl < Date.now()) {
@@ -50,7 +55,7 @@ class NodeCache {
             this.worker.postMessage({ cache: this.cache })
             //passive ttl expire - fallback for env not supporting worker threads
             this.delete(key)
-            this.logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
+            this.#logger.log(`${CONSTANTS.ITEM_NOTFOUND} : ${key}`)
             return undefined
         }
 
@@ -63,14 +68,14 @@ class NodeCache {
 
     set(key, value, ttl) {
         if (!key && !value) {
-            this.logger.log(CONSTANTS.INVALID_KEY_VALUE)
+            this.#logger.log(CONSTANTS.INVALID_KEY_VALUE)
             return false
         } else if (!key || !["string", "number"].includes(typeof key)) {
-            this.logger.log(CONSTANTS.INVALID_KEY_TYPE)
+            this.#logger.log(CONSTANTS.INVALID_KEY_TYPE)
             return false
         }
         else if (!value || !["string", "number", "object"].includes(typeof value)) {
-            this.logger.log(CONSTANTS.INVALID_VALUE_TYPE)
+            this.#logger.log(CONSTANTS.INVALID_VALUE_TYPE)
             return false
         }
 
@@ -89,7 +94,7 @@ class NodeCache {
         this.cache[key] = { value, ttl: ttl ? Date.now() + Math.abs(ttl) : Date.now() + cacheConfig.stdTTL }
         cacheConfig.keyCount += 1
         // update the context of cache in the worker thread.
-        // this.worker.postMessage({ cache: this.cache, logger: this.logger, action: "set" })
+        // this.worker.postMessage({ cache: this.cache, logger: this.#logger, action: "set" })
         return true
     }
 
