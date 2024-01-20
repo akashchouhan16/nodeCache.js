@@ -337,13 +337,13 @@ describe("NodeCache params for instance config", () => {
         })
 
         test("NodeCache instance with Logger::mode as none", () => {
-            expect(cache.logger.mode).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("none")
         })
         test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
+            expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 
@@ -360,13 +360,13 @@ describe("NodeCache params for instance config", () => {
             expect(cache).not.toBe(null)
         })
         test("NodeCache instance with Logger::mode as std", () => {
-            expect(cache.logger.mode).toEqual("std")
+            expect(cache.getLogConfig().mode).toEqual("std")
         })
         test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
+            expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 
@@ -385,9 +385,9 @@ describe("NodeCache params for instance config", () => {
 
         test("When valid instance uses default params for logger", () => {
             expect(cache).not.toBe(null)
-            expect(cache.logger.mode).toEqual("none")
-            expect(cache.logger.type).toEqual("xyz")
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("none")
+            expect(cache.getLogConfig().type).toEqual("xyz")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 })

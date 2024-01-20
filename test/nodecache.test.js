@@ -16,13 +16,13 @@ describe("NodeCache instance creation", () => {
         })
 
         test("NodeCache instance with default Logger::mode = none", () => {
-            expect(cache.logger.mode).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("none")
         })
         test("NodeCache instance with Logger::type = info", () => {
-            expect(cache.logger.type).toEqual("info")
+            expect(cache.getLogConfig().type).toEqual("info")
         })
         test("NodeCache instance with Logger::path = none", () => {
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 
@@ -239,5 +239,17 @@ describe("NodeCache public APIs", () => {
         expect(() => cache.setTTL(NaN, NaN)).toThrow(Error)
         expect(() => cache.setTTL("valid-key", undefined)).toThrow(Error)
         expect(() => cache.setTTL(undefined, undefined)).toThrow(Error)
+    })
+
+    test("NodeCache::getLogConfig call to validate logger object", () => {
+        const logConfig = cache.getLogConfig();
+        expect(logConfig).toBeDefined()
+        expect(logConfig).toStrictEqual(expect.any(Object))
+        expect(logConfig).toEqual({
+            formatOptions: expect.any(Object),
+            mode: expect.any(String),
+            type: expect.any(String),
+            path: expect.any(String),
+        })
     })
 })
