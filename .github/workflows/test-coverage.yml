@@ -5,10 +5,17 @@ on:
             - master
             - publish
 jobs:
-    coverage:
+      coverage:
+        permissions:
+            checks: write
+            pull-requests: write
+            contents: write
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
+            - uses: jwalton/gh-find-current-pr@v1
+                id: findPr
             - uses: ArtiomTr/jest-coverage-report-action@v2
               with:
+                prnumber: ${{ steps.findPr.outputs.number }}
                 github-token: ${{ secrets.GITHUB_TOKEN }}
