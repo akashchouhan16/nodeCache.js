@@ -55,7 +55,7 @@ describe("NodeCache public APIs", () => {
         cache.getM([
             1, "2", "key"
         ])
-        // expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
+        expect(cache.global()).toEqual({ cacheHit: 2, cacheMiss: 1, keyCount: 2 })
         cache.flush()
         expect(cache.global()).toEqual({ cacheHit: 0, cacheMiss: 0, keyCount: 0 })
     })
@@ -71,7 +71,7 @@ describe("NodeCache public APIs", () => {
     })
     test("NodeCache::get with valid key on cache hit", () => {
         cache.set("k1", 12345)
-        expect(cache.get("k1")).toEqual("12345") // with forceString true by default
+        expect(cache.get("k1")).toStrictEqual("12345") // with forceString true by default
     })
     test("NodeCache::get with invalid key", () => {
         expect(cache.get(null)).toBeUndefined()
@@ -242,7 +242,7 @@ describe("NodeCache public APIs", () => {
     })
 
     test("NodeCache::getLogConfig call to validate logger object", () => {
-        const logConfig = cache.getLogConfig();
+        const logConfig = cache.getLogConfig()
         expect(logConfig).toBeDefined()
         expect(logConfig).toStrictEqual(expect.any(Object))
         expect(logConfig).toEqual({
