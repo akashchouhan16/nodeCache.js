@@ -1,6 +1,6 @@
 name: Unit Test Coverage
 on:
-    pull_request:
+    pull_request_target:
         branches:
             - master
             - publish
@@ -12,4 +12,3 @@ jobs:
             - uses: ArtiomTr/jest-coverage-report-action@v2
               with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
-                custom-title: Jest Coverage report for NodeCache
