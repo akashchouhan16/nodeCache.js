@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test-coverage": "npx jest --ci --coverage",
+    "export-coverage-report": "npx jest --ci --json --coverage --testLocationInResults --outputFile=report.json",
     "lint": "eslint .  --ext .js",
     "lint-fix": "eslint --fix .  --ext .js"
   },
