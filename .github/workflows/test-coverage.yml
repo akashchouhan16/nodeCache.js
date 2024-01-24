@@ -1,0 +1,20 @@
+name: Unit Test Coverage
+on:
+    pull_request_target:
+        branches:
+            - master
+            - publish
+jobs:
+      coverage:
+        permissions:
+            checks: write
+            pull-requests: write
+            contents: write
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+            - name: Generate ArtiomTr Jest Coverage report
+              uses: ArtiomTr/jest-coverage-report-action@v2
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
