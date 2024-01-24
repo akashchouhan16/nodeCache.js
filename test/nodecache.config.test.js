@@ -4,26 +4,38 @@ const NodeCache = require("../index")
 describe("NodeCache params for instance config", () => {
 
     describe("NodeCache params - all invalid", () => {
-
         let cache
         afterEach(() => {
             cache.close()
         })
-
-        test("When all config values are null ", () => {
+        test("When all config values are null", () => {
             cache = new NodeCache({
                 forceString: null,
                 stdTTL: null,
                 maxKeys: null,
+                valueOnly: null
             })
             cache.set(1, 12345)
-            expect(cache.cache[1]).toStrictEqual({
+            //since forceString will be enabled by default and valueOnly will be true by default.
+            expect(cache.get(1)).toStrictEqual(expect.any(String))
+            expect(cache.get(1)).toStrictEqual("12345")
+        })
+
+        test("When all config values are null with valueOnly disabled", () => {
+            cache = new NodeCache({
+                forceString: null,
+                stdTTL: null,
+                maxKeys: null,
+                valueOnly: false
+            })
+            cache.set(1, 12345)
+            expect(cache.get(1)).toStrictEqual({
                 value: expect.any(String), //since forceString will be enabled by default
                 ttl: expect.any(Number)
             })
 
-            expect(cache.cache[1]?.ttl).toBeLessThanOrEqual(Date.now())
-            expect(cache.cache[1]?.value).toStrictEqual("12345")
+            expect(cache.get(1)?.ttl).toBeLessThanOrEqual(Date.now())
+            expect(cache.get(1)?.value).toStrictEqual("12345")
         })
 
         test("When all config values are negative", () => {
@@ -32,15 +44,16 @@ describe("NodeCache params for instance config", () => {
                 forceString: -1,
                 stdTTL: -1,
                 maxKeys: -1,
+                valueOnly: false
             })
             cache.set(2, 678910)
-            expect(cache.cache[2]).toStrictEqual({
+            expect(cache.get(2)).toStrictEqual({
                 value: expect.any(String), //since forceString will be enabled by default
                 ttl: expect.any(Number)
             })
 
-            expect(cache.cache[2]?.ttl).toBeLessThanOrEqual(Date.now())
-            expect(cache.cache[2]?.value).toStrictEqual("678910")
+            expect(cache.get(2)?.ttl).toBeLessThanOrEqual(Date.now())
+            expect(cache.get(2)?.value).toStrictEqual("678910")
             expect(cache.setM([
                 { key: "kx", value: 1 },
                 { key: "ky", value: 2, ttl: 60 * 60 * 1000 },
@@ -56,9 +69,9 @@ describe("NodeCache params for instance config", () => {
 
         test("When no stdTTL value is configured", () => {
             try {
-                cache = new NodeCache()
+                cache = new NodeCache({ valueOnly: false })
                 cache.set("no-std-ttl", "test-value")
-                expect(cache.cache["no-std-ttl"]).toStrictEqual({
+                expect(cache.get("no-std-ttl")).toStrictEqual({
                     value: expect.any(String),
                     ttl: expect.any(Number)
                 })
@@ -70,20 +83,21 @@ describe("NodeCache params for instance config", () => {
         test("When valid stdTTL of 100ms is configured for all the NodeCache::set() calls", () => {
             try {
                 cache = new NodeCache({
-                    stdTTL: 100
+                    stdTTL: 100,
+                    valueOnly: false
                 })
 
                 cache.set("std-100", "test-value")
-                expect(cache.cache["std-100"]).toStrictEqual({
+                expect(cache.get("std-100")).toStrictEqual({
                     value: expect.any(String),
                     ttl: expect.any(Number)
                 })
                 setTimeout(() => {
                     cache.get("std-100")
-                    expect(cache.cache["std-100"]).toBeUndefined()
+                    expect(cache.get("std-100")).toBeUndefined()
                 }, 150)
 
-                expect(cache.cache["std-100"]?.ttl).toBeGreaterThanOrEqual(Date.now())
+                expect(cache.get("std-100")?.ttl).toBeGreaterThanOrEqual(Date.now())
             } catch (error) {
                 console.warn(error.message)
             }
@@ -91,84 +105,91 @@ describe("NodeCache params for instance config", () => {
 
         test("When valid, very large stdTTL value configured", () => {
             cache = new NodeCache({
-                stdTTL: 30 * 24 * 60 * 60 * 1000 // 30 days
+                stdTTL: 30 * 24 * 60 * 60 * 1000, // 30 days
+                valueOnly: false
             })
 
             cache.set("std-large", "test-value-largeStd")
-            expect(cache.cache["std-large"]).toStrictEqual({
+            expect(cache.get("std-large")).toStrictEqual({
                 value: expect.anything(),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-large"].ttl).toBeGreaterThanOrEqual(Date.now())
-            expect(cache.cache["std-large"].value).toStrictEqual("test-value-largeStd")
+            expect(cache.get("std-large").ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-large").value).toStrictEqual("test-value-largeStd")
         })
 
         test("When boolean stdTTL value is configured", () => {
             cache = new NodeCache({
-                stdTTL: true
+                stdTTL: true,
+                valueOnly: false
             })
             // expect the stdTTL to be 0 => Infinite.
             cache.set("std-boolean", "boolean-ttl-check")
-            expect(cache.cache["std-boolean"]).toStrictEqual({
+            expect(cache.get("std-boolean")).toStrictEqual({
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-boolean"]?.ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-boolean")?.ttl).toBeGreaterThanOrEqual(Date.now())
         })
 
         test("When string stdTTL value is configured", () => {
             cache = new NodeCache({
-                stdTTL: "15000" // 15seconds
+                stdTTL: "15000", // 15seconds
+                valueOnly: false
             })
             // expect the stdTTL to be 0 => Infinite.
 
             cache.set("std-boolean", "string-ttl-check")
-            expect(cache.cache["std-boolean"]).toStrictEqual({
+            expect(cache.get("std-boolean")).toStrictEqual({
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-boolean"]?.ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-boolean")?.ttl).toBeGreaterThanOrEqual(Date.now())
         })
 
         test("When falsy (NaN) stdTTL value is configured", () => {
             cache = new NodeCache({
+                valueOnly: false,
                 stdTTL: NaN // falsy values: 0, false, null, undefined, NaN, ''
             })
             // expect the stdTTL to be 0 => Infinite.
             cache.set("std-falsy", "falsy-check")
-            expect(cache.cache["std-falsy"]).toStrictEqual({
+            expect(cache.get("std-falsy")).toStrictEqual({
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-falsy"].ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-falsy")?.ttl).toBeLessThanOrEqual(Date.now())
         })
 
         test("When falsy (null) stdTTL value is configured", () => {
             cache = new NodeCache({
+                forceString: false,
+                valueOnly: false,
                 stdTTL: null
             })
             // expect the stdTTL to be 0 => Infinite.
             cache.set("std-falsy-2", "falsy-check-2")
-            expect(cache.cache["std-falsy-2"]).toStrictEqual({
+            expect(cache.get("std-falsy-2")).toStrictEqual({
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-falsy-2"].ttl).toBeGreaterThanOrEqual(Date.now())
-            expect(cache.cache["std-falsy-2"].value).toStrictEqual("falsy-check-2")
+            expect(cache.get("std-falsy-2")?.ttl).toBeLessThanOrEqual(Date.now())
+            expect(cache.get("std-falsy-2")?.value).toStrictEqual("falsy-check-2")
         })
 
         test("When falsy (undefined) stdTTL value is configured", () => {
             cache = new NodeCache({
-                stdTTL: undefined
+                stdTTL: undefined,
+                valueOnly: false
             })
             // expect the stdTTL to be 0 => Infinite.
             cache.set("std-falsy-2", "falsy-check-2")
-            expect(cache.cache["std-falsy-2"]).toStrictEqual({
+            expect(cache.get("std-falsy-2")).toStrictEqual({
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.cache["std-falsy-2"].ttl).toBeGreaterThanOrEqual(Date.now())
-            expect(cache.cache["std-falsy-2"].value).toStrictEqual("falsy-check-2")
+            expect(cache.get("std-falsy-2")?.ttl).toBeLessThanOrEqual(Date.now())
+            expect(cache.get("std-falsy-2")?.value).toStrictEqual("falsy-check-2")
         })
     })
 
@@ -187,7 +208,7 @@ describe("NodeCache params for instance config", () => {
                 createAt: Date.now()
             })
 
-            let { value } = cache.cache["key1"]
+            const value = cache.get("key1")
 
             expect(value).not.toBeUndefined()
             expect(value).toEqual(expect.any(String)) // not an object anymore
@@ -203,7 +224,7 @@ describe("NodeCache params for instance config", () => {
                 createAt: Date.now()
             })
 
-            let { value } = cache.cache["key2"]
+            const value = cache.get("key2")
 
             expect(value).not.toBeUndefined()
             expect(value).toEqual(expect.any(Object))
@@ -226,7 +247,8 @@ describe("NodeCache params for instance config", () => {
             }
 
             expect(flag).toBeTruthy()
-            expect(cache.cache[6]).not.toBeUndefined()
+            expect(cache.get(6)).not.toBeUndefined()
+            cache.close()
         })
 
         test("When maxKeys set to 5, limit imposed on cache", () => {
@@ -240,15 +262,27 @@ describe("NodeCache params for instance config", () => {
                 }
             }).toThrow(Error)
 
-            expect(cache.cache[5]).not.toBeUndefined()
-            expect(cache.cache[6]).toBeUndefined()
+            expect(cache).toBeDefined()
+            const loggerConfigurations = cache.getLogConfig()
+            const configurations = cache.getCacheConfig()
+
+            expect(configurations).toBeDefined()
+            expect(configurations).toStrictEqual(expect.any(Object))
+
+            expect(loggerConfigurations).toBeDefined()
+            expect(loggerConfigurations).toStrictEqual(expect.any(Object))
+            expect(cache.get(6)).toBeUndefined()
+
+            cache.close()
         })
     })
     describe("NodeCache valueOnly configurations: Default (true) case", () => {
         let cache
         beforeEach(() => {
             cache = new NodeCache({
-                //    valueOnly: true // By default valueOnly is set to true -> backward compatibility with older npm versions.
+                forceString: false
+                // valueOnly: true 
+                // By default valueOnly is set to true -> backward compatibility with older npm versions.
             })
         })
         afterEach(() => {
@@ -256,7 +290,7 @@ describe("NodeCache params for instance config", () => {
         })
 
         test("When not valueOnly flag with the instance", () => {
-            expect(cache.config["valueOnly"]).toEqual(true)
+            expect(cache.getCacheConfig().valueOnly).toEqual(true)
         })
 
         test("When using Get() and Set() calls - true case", () => {
@@ -282,6 +316,8 @@ describe("NodeCache params for instance config", () => {
         let cache
         beforeEach(() => {
             cache = new NodeCache({
+                //forceString: true by default
+                forceString: false,
                 valueOnly: false
             })
         })
@@ -290,7 +326,7 @@ describe("NodeCache params for instance config", () => {
         })
 
         test("When not valueOnly flag with the instance", () => {
-            expect(cache.config["valueOnly"]).toEqual(false)
+            expect(cache.getCacheConfig().valueOnly).toEqual(false)
         })
 
         test("When using get() and set() calls - false case", () => {
@@ -337,13 +373,13 @@ describe("NodeCache params for instance config", () => {
         })
 
         test("NodeCache instance with Logger::mode as none", () => {
-            expect(cache.logger.mode).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("none")
         })
         test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
+            expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 
@@ -360,13 +396,13 @@ describe("NodeCache params for instance config", () => {
             expect(cache).not.toBe(null)
         })
         test("NodeCache instance with Logger::mode as std", () => {
-            expect(cache.logger.mode).toEqual("std")
+            expect(cache.getLogConfig().mode).toEqual("std")
         })
         test("NodeCache instance with Logger::type as Custom", () => {
-            expect(cache.logger.type).toEqual("Custom")
+            expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 
@@ -385,9 +421,9 @@ describe("NodeCache params for instance config", () => {
 
         test("When valid instance uses default params for logger", () => {
             expect(cache).not.toBe(null)
-            expect(cache.logger.mode).toEqual("none")
-            expect(cache.logger.type).toEqual("xyz")
-            expect(cache.logger.path).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("none")
+            expect(cache.getLogConfig().type).toEqual("xyz")
+            expect(cache.getLogConfig().path).toEqual("none")
         })
     })
 })
