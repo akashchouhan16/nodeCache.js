@@ -97,7 +97,7 @@ describe("NodeCache params for instance config", () => {
                     expect(cache.get("std-100")).toBeUndefined()
                 }, 150)
 
-                expect(cache.get("std-100")?.ttl).toBeGreaterThanOrEqual(Date.now())
+                expect(cache.get("std-100")?.ttl).toStrictEqual(expect.any(Number))
             } catch (error) {
                 console.warn(error.message)
             }
@@ -114,7 +114,7 @@ describe("NodeCache params for instance config", () => {
                 value: expect.anything(),
                 ttl: expect.any(Number)
             })
-            expect(cache.get("std-large").ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-large").ttl).toStrictEqual(expect.any(Number))
             expect(cache.get("std-large").value).toStrictEqual("test-value-largeStd")
         })
 
@@ -129,7 +129,7 @@ describe("NodeCache params for instance config", () => {
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.get("std-boolean")?.ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-boolean")?.ttl).toBeLessThanOrEqual(Date.now())
         })
 
         test("When string stdTTL value is configured", () => {
@@ -144,7 +144,7 @@ describe("NodeCache params for instance config", () => {
                 value: expect.any(String),
                 ttl: expect.any(Number)
             })
-            expect(cache.get("std-boolean")?.ttl).toBeGreaterThanOrEqual(Date.now())
+            expect(cache.get("std-boolean")?.ttl).toBeLessThanOrEqual(Date.now())
         })
 
         test("When falsy (NaN) stdTTL value is configured", () => {

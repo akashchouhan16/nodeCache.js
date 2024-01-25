@@ -1,13 +1,13 @@
 const NodeCache = require("../index")
 
 describe("NodeCache.js Configuration Setup Suit", () => {
-    let cache;
+    let cache
     afterEach(() => {
         cache.close()
     })
 
     test("NodeCache.js with no configuration options to be defined", () => {
-        cache = new NodeCache();
+        cache = new NodeCache()
 
         expect(cache).toBeDefined()
         expect(cache.getLogConfig()).toBeDefined()
@@ -31,7 +31,7 @@ describe("NodeCache.js Configuration Setup Suit", () => {
             valueOnly: null,
             maxKeys: null,
             stdTTL: null
-        });
+        })
 
         expect(cache).toBeDefined()
         expect(cache.getLogConfig()).toBeDefined()
@@ -52,7 +52,7 @@ describe("NodeCache.js Configuration Setup Suit", () => {
     test("NodeCache.js with valueOnly false configuration options to be defined", () => {
         cache = new NodeCache({
             valueOnly: false
-        });
+        })
 
         expect(cache).toBeDefined()
         const loggerConfiguration = cache.getLogConfig()
@@ -84,7 +84,7 @@ describe("NodeCache.js Configuration Setup Suit", () => {
         cache = new NodeCache({
             forceString: false
             //valueOnly: true by default
-        });
+        })
 
         expect(cache).toBeDefined()
         const loggerConfiguration = cache.getLogConfig()
@@ -113,7 +113,7 @@ describe("NodeCache.js Configuration Setup Suit", () => {
             valueOnly: false,
             maxKeys: 3,
             stdTTL: 2 * 60 * 60 * 1000
-        });
+        })
 
         expect(cache).toBeDefined()
         const loggerConfiguration = cache.getLogConfig()
