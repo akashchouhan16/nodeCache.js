@@ -24,6 +24,10 @@ describe("NodeCache instance creation", () => {
         test("NodeCache instance with Logger::path = none", () => {
             expect(cache.getLogConfig().path).toEqual("none")
         })
+
+        test("NodeCache instance worker to be defined", () => {
+            expect(cache.worker).toBeDefined()
+        })
     })
 
 

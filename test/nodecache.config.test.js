@@ -361,6 +361,7 @@ describe("NodeCache params for instance config", () => {
         let cache
         beforeAll(() => {
             cache = new NodeCache({
+                mode: "none",
                 type: "Custom"
             })
         })
@@ -379,7 +380,7 @@ describe("NodeCache params for instance config", () => {
             expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.getLogConfig().path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual(undefined)
         })
     })
 
@@ -402,15 +403,15 @@ describe("NodeCache params for instance config", () => {
             expect(cache.getLogConfig().type).toEqual("Custom")
         })
         test("NodeCache instance with Logger::path as none", () => {
-            expect(cache.getLogConfig().path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual(undefined)
         })
     })
 
-    describe("NodeCache Falsy mode and path config for the instance", () => {
+    describe("NodeCache Falsy path config for the instance", () => {
         let cache
         beforeAll(() => {
             cache = new NodeCache({
-                mode: null,
+                mode: "std",
                 type: "xyz",
                 path: undefined
             })
@@ -421,9 +422,9 @@ describe("NodeCache params for instance config", () => {
 
         test("When valid instance uses default params for logger", () => {
             expect(cache).not.toBe(null)
-            expect(cache.getLogConfig().mode).toEqual("none")
+            expect(cache.getLogConfig().mode).toEqual("std")
             expect(cache.getLogConfig().type).toEqual("xyz")
-            expect(cache.getLogConfig().path).toEqual("none")
+            expect(cache.getLogConfig().path).toEqual(undefined)
         })
     })
 })
