@@ -2,7 +2,7 @@
 
 
 ![Travis Build Status](https://img.shields.io/travis/com/akashchouhan16/nodecache.js?label=Travis+CI+build&color=F2ECAC)
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/package-unit-tests.yml?&label=%20Node.js%20CI)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/akashchouhan16/nodeCache.js/nodecache-unit-tests.yml?&label=%20Node.js%20CI)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-1dbf73.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js is actively Maintained")
 [![made-for-Developers](https://img.shields.io/badge/Made%20for-Developers-238636.svg)](https://github.com/akashchouhan16/nodeCache.js "nodeCache.js")
 
