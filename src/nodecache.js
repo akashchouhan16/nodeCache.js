@@ -16,9 +16,9 @@ class NodeCache {
     #config
     constructor(options = {}) {
         this.#cache = {}
-        this.#config = Object.assign({}, cacheConfig);
+        this.#config = Object.assign({}, cacheConfig)
         this.#logger = new Logger({ ...options })
-        this.#setConfigurations(options);
+        this.#setConfigurations(options)
 
         if (isMainThread) {
             this.worker = new Worker(path.join(__dirname, "/worker/worker.js"))
@@ -35,7 +35,7 @@ class NodeCache {
 
     #setConfigurations(options) {
         if (options) {
-            let { forceString, maxKeys, stdTTL, valueOnly } = options;
+            let { forceString, maxKeys, stdTTL, valueOnly } = options
 
             if (valueOnly !== undefined && typeof valueOnly === "boolean")
                 this.#config.valueOnly = valueOnly
@@ -198,7 +198,7 @@ class NodeCache {
     }
 
     flush() {
-        this.#config = cacheConfig;
+        this.#config = cacheConfig
         this.#cache = {}
     }
 

@@ -6,29 +6,34 @@
 
 const { log, warn, error } = require("console")
 const CONSTANTS = require("./constants")
-const validator = require("./validator")
+const { Validator } = require("./validator")
 const process = require("node:process")
 
 class Logger {
+    #validator
     constructor(options = {}) {
-
         this.formatOptions = {
             dateStyle: "short",
             timeStyle: "short",
             hour12: true,
         }
+        this.#validator = new Validator(options)
 
-        if (validator(options)) {
-            this.mode = options.mode || "none" // permitted: [node, std, exp]
-            this.type = options.type || "info" // permitted: [info, warn, error, fatal]
-            this.path = options.path || "none" //permitted: [none, console, file]
+        if (this.#validator.validate(options)) {
+            this.mode = options.mode // permitted: [node, std, exp]
+            this.type = options.type ?? this.#setType(options.type) // permitted: [info, warn, error, fatal]
+            this.path = options.path //permitted: [none, console, file]
         } else {
+            this.mode = "none"
+            this.type = "info"
+            this.path = "none"
             const date = new Date().toLocaleString("en-US", this.formatOptions)
-            error(`[🍁 Err] ${date}: ${CONSTANTS.INVALID_INPUT}`)
-            process.exit(1)
+            this.log(`${date}: ${CONSTANTS.INVALID_INPUT}`)
         }
     }
-
+    #setType(type) {
+        this.type = type
+    }
     log(message, options = {}) {
         if (!message || this.mode === "none")
             return
