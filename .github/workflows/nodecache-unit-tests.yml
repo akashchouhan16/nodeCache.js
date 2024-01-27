@@ -5,7 +5,7 @@ name: Node.js CI - Tests on nodeCache.js
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
   pull_request:
     branches: [ "publish" ]
 
@@ -16,7 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14.x, 16.x, 18.x, latest]
+        express-version: [latest, next]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
